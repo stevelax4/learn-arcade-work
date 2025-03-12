@@ -1,61 +1,88 @@
 import arcade
 
 
-def draw_road():
-    arcade.draw_lrtb_rectangle_filled(0, 400, 150, 100, arcade.color.DARK_GRAY)
-    for i in range(0, 400, 40):
-        arcade.draw_lrtb_rectangle_filled(i + 10, i + 30, 127, 123, arcade.color.WHITE)
+#Draw sun
+def draw_sun(x, y):
+    arcade.draw_circle_filled(x, y, 40, arcade.color.YELLOW)
+
+#Draw grass
+def draw_grass(x, y):
+    arcade.draw_rectangle_filled(x, y, 400, 100, arcade.color.GREEN)
+
+#Draw tree trunk
+def draw_tree_trunk(x, y):
+    arcade.draw_rectangle_filled(x, y, 20, 60, arcade.color.DARK_BROWN)
+
+#Draw tree leaves
+def draw_tree_leaves(x, y):
+    arcade.draw_circle_filled(x, y, 30, arcade.color.FOREST_GREEN)
+    arcade.draw_circle_filled(x - 15, y - 15, 25, arcade.color.FOREST_GREEN)
+    arcade.draw_circle_filled(x + 15, y - 15, 25, arcade.color.FOREST_GREEN)
 
 
-def draw_bus():
-    arcade.draw_rectangle_filled(200, 200, 150, 80, arcade.color.YELLOW)
-
-    # Windows
-    for i in range(3):
-        arcade.draw_rectangle_filled(160 + i * 40, 230, 30, 40, arcade.color.LIGHT_BLUE)
-
-    # Stop Sign
-    arcade.draw_rectangle_filled(275, 200, 20, 20, arcade.color.RED)
-    arcade.draw_text("STOP", 267, 193, arcade.color.WHITE, 8, bold=True)
-
-    # Wheels
-    for x in [140, 260]:
-        arcade.draw_circle_filled(x, 170, 15, arcade.color.BLACK)
-        arcade.draw_circle_filled(x, 170, 7, arcade.color.GRAY)
+# Draw clouds
+def draw_clouds(x, y):
+    arcade.draw_circle_filled(x, y, 20, arcade.color.WHITE)
+    arcade.draw_circle_filled(x + 10, y, 25, arcade.color.WHITE)
+    arcade.draw_circle_filled(x + 20, y + 20, 25, arcade.color.WHITE)
+    arcade.draw_circle_filled(x + 30, y, 25, arcade.color.WHITE)
+    arcade.draw_circle_filled(x + 50, y, 25, arcade.color.WHITE)
 
 
-def draw_tree():
-    # Trunk
-    arcade.draw_rectangle_filled(70, 180, 20, 60, arcade.color.BROWN)
-
-    # Leaves
-    arcade.draw_circle_filled(70, 220, 40, arcade.color.DARK_GREEN)
-    arcade.draw_circle_filled(50, 200, 30, arcade.color.DARK_GREEN)
-    arcade.draw_circle_filled(90, 200, 30, arcade.color.DARK_GREEN)
+# draw pond
+def draw_pond(x, y):
+    arcade.draw_circle_filled(x, y, 70, arcade.color.BLUE)
+    arcade.draw_circle_filled(x - 50, y, 60, arcade.color.BLUE)
+    arcade.draw_circle_filled(x - 80, y - 20, 60, arcade.color.BLUE)
 
 
-def draw_sun():
-    arcade.draw_circle_filled(350, 350, 40, arcade.color.YELLOW)
+# Draw fish
+def draw_fish(x, y):
+    arcade.draw_circle_filled(x + 5, y, 5, arcade.color.ORANGE)
+    arcade.draw_rectangle_filled(x, y, 6, 6, arcade.color.ORANGE)
 
 
-def draw_grass():
-    arcade.draw_lrtb_rectangle_filled(0, 400, 100, 0, arcade.color.GREEN)
-
-
-def on_draw():
-    arcade.start_render()
-    draw_grass()
-    draw_road()
-    draw_bus()
-    draw_tree()
-    draw_sun()
-
-
+# --- Main Function to Call All Drawings ---
 def main():
-    arcade.open_window(400, 400, "Road, Bus, Tree")
+    # Open the window
+    arcade.open_window(400, 400, "Grossman Tree")
+
+    # Set the background color
     arcade.set_background_color(arcade.color.SKY_BLUE)
-    arcade.schedule(lambda dt: on_draw(), 1 / 60)
+
+    # Start drawing
+    arcade.start_render()
+
+    # Draw each element in the scene
+    draw_sun(350, 350)  # Draw the sun at (350, 350)
+    draw_grass(200, 50)  # Draw the grass at (200, 50)
+
+    # Draw trees
+    draw_tree_trunk(100, 120)  # Draw first tree trunk at (100, 120)
+    draw_tree_leaves(100, 160)  # Draw first tree leaves at (100, 160)
+
+    draw_tree_trunk(200, 100)  # Draw second tree trunk at (200, 100)
+    draw_tree_leaves(200, 140)  # Draw second tree leaves at (200, 140)
+
+    # Draw clouds in different locations
+    draw_clouds(20, 300)  # First cloud cluster at (20, 300)
+    draw_clouds(200, 310)  # Second cloud cluster at (200, 310)
+
+    # Draw pond at (350, 30)
+    draw_pond(350, 30)
+
+    # Draw fish in the pond at different positions
+    draw_fish(325, 30)  # Fish 1
+    draw_fish(320, 10)  # Fish 2
+    draw_fish(335, 40)  # Fish 3
+
+    # Finish drawing
+    arcade.finish_render()
+
+    # Keep the window open until it is closed
     arcade.run()
 
 
-main()
+# Call the main function
+if __name__ == "__main__":
+    main()
