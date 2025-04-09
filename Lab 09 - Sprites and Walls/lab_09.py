@@ -1,15 +1,19 @@
 """ Sprite Sample Program """
 
 import arcade
+import random
 
 # --- Constants ---
 SPRITE_SCALING_BOX = 0.5
 SPRITE_SCALING_PLAYER = 0.5
+SPRITE_SCALING_COIN = 0.5
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 MOVEMENT_SPEED = 5
+
+COIN_COUNT = 50
 
 class MyGame(arcade.Window):
     """ This class represents the main window of the game. """
@@ -22,9 +26,11 @@ class MyGame(arcade.Window):
         # Sprite lists
         self.player_list = None
         self.wall_list = None
+        self.coin_list = 50
 
         # Set up the player
         self.player_sprite = None
+
 
     def setup(self):
 
@@ -73,6 +79,7 @@ class MyGame(arcade.Window):
                            [464, 564]]
 
 
+
         # Loop through coordinates
         for coordinate in coordinate_list:
             wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING_BOX)
@@ -81,12 +88,18 @@ class MyGame(arcade.Window):
             self.wall_list.append(wall)
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
 
+        #while len(self.coin_list) < COIN_COUNT:
+           # coin = arcade.Sprite(":resources:images/items/coinGold_ul.png", SPRITE_SCALING_COIN)
+           # coin.center_x = random.randrange(SCREEN_WIDTH)
+          #  coin.center_y = random.randrange(SCREEN_HEIGHT)
 
     def on_draw(self):
         arcade.start_render()
         self.player_list.draw()
         self.wall_list.draw()
 
+    def update(self, delta_time):
+        self.physics_engine.update()
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
