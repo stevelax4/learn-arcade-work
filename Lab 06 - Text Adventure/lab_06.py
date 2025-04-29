@@ -7,7 +7,6 @@ class Room:
         self.west = west
         self.item = item
 
-# Intro when ran
 def main():
     print("Welcome to the Abandoned Factory Escape!")
     print("You are trapped in an old factory. Something seems off, find the key and use it to unlock the exit door.")
@@ -17,58 +16,68 @@ def main():
 
     room_list = []
 
-    # Creating rooms with descriptions
-    room_list.append(Room("You are in an old dusty office. You hear someone breathing.", 1, None, None, None))
-    room_list.append(
-        Room("You are in a dimly lit hallway. The walls are scratched. Something was here.", 2, None, 0, 4))
-    room_list.append(
-        Room("You are in a storage room. Rusty tools hang from the walls. A single key lies on the floor.", 5, 3, 1,
-             None, "key"))
-    room_list.append(
-        Room("You are in a factory floor, old machines sit silently. The exit door stands locked. This is your way out!", None, None, None,
-             2))
-    room_list.append(
-        Room("You are in a break room. The vending machine hums, but the snacks are long expired.", None, 1, None,
-             None))
-    room_list.append(
-        Room("You are in a boiler room. Steam leaks from old pipes, and the air is thick with rust.", None, 6, 2, None))
-    room_list.append(
-        Room("You are in a security office. The monitors flicker, showing static and glimpses of movement.", None, None,
-             5, None))
+    room = Room("You are in an old dusty office. You hear someone breathing.", 1, None, None, None)
+    room_list.append(room)
+
+    room = Room("You are in a dimly lit hallway. The walls are scratched. Something was here.", 2, None, 0, 4)
+    room_list.append(room)
+
+    room = Room("You are in a storage room. Rusty tools hang from the walls. A single key lies on the floor.",
+                5, 3, 1, None, "key")
+    room_list.append(room)
+
+    room = Room("You are in a factory floor, old machines sit silently. The exit door stands locked. This is your way out!",
+                None, None, None, 2)
+    room_list.append(room)
+
+    room = Room("You are in a break room. The vending machine hums, but the snacks are long expired.",
+                None, 1, None, None)
+    room_list.append(room)
+
+    room = Room("You are in a boiler room. Steam leaks from old pipes, and the air is thick with rust.",
+                None, 6, 2, None)
+    room_list.append(room)
+
+    room = Room("You are in a security office. The monitors flicker, showing static and glimpses of movement.",
+                None, None, 5, None)
+    room_list.append(room)
 
     current_room = 0
     inventory = []
     done = False
 
-    # Code for key
-
     while not done:
-        print("\n" + room_list[current_room].description)
+        print()
+        print(room_list[current_room].description)
 
         if room_list[current_room].item == "key" and "key" not in inventory:
-            action = input("Would you like to grab the key? (grab key)\n").strip().lower()
+            action = input("Would you like to grab the key? (grab key)\n").lower()
             if action == "grab key":
                 inventory.append("key")
                 room_list[current_room].item = None
                 print("You picked up the key.")
                 continue
 
-        action = input("What do you want to do?\n").strip().lower()
+        action = input("What do you want to do?\n").lower()
 
-        if action in ["n", "north"]:
+        if action == "n" or action == "north":
             next_room = room_list[current_room].north
-        elif action in ["e", "east"]:
+        elif action == "e" or action == "east":
             next_room = room_list[current_room].east
-        elif action in ["s", "south"]:
+        elif action == "s" or action == "south":
             next_room = room_list[current_room].south
-        elif action in ["w", "west"]:
+        elif action == "w" or action == "west":
             next_room = room_list[current_room].west
-        elif action == "use key" and current_room == 3:
-            if "key" in inventory:
-                print("You use the key to unlock the door. You have escaped!")
-                break
+        elif action == "use key":
+            if current_room == 3:
+                if "key" in inventory:
+                    print("You use the key to unlock the door. You have escaped!")
+                    break
+                else:
+                    print("You don't have a key to use.")
+                    continue
             else:
-                print("You don't have a key to use.")
+                print("You aren't at the door.")
                 continue
         elif action == "quit":
             done = True
@@ -81,7 +90,6 @@ def main():
             current_room = next_room
         else:
             print("You can't go that way.")
-
 
 if __name__ == "__main__":
     main()
