@@ -83,6 +83,7 @@ class MyGame(arcade.Window):
         # Create kite
         self.kite = Kite(400, 300)  # Start in the middle of the screen
 
+
     def on_draw(self):
         """ Called whenever we need to draw the window. """
         arcade.start_render()

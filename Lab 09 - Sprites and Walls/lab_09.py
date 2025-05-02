@@ -25,6 +25,7 @@ class MyGame(arcade.Window):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Sprite Example")
 
         # Sprite lists
+        self.physics_engine = None
         self.player_list = None
         self.wall_list = None
         self.coin_list = None
