@@ -11,7 +11,7 @@ JUMP_SPEED = 12
 PIPE_SPEED = 3
 PIPE_GAP = 200
 PIPE_SPACING = 300
-PIPE_WIDTH = 80  # Pipe width
+PIPE_WIDTH = 80
 
 
 class Pipe:
