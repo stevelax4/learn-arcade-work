@@ -78,6 +78,7 @@ class FlappyZombie(arcade.Window):
         for i in range(3):
             self.create_pipe_pair(SCREEN_WIDTH + i * PIPE_SPACING)
 
+
     def create_cloud(self, x):
         return {"x": x, "y": random.randint(400, SCREEN_HEIGHT - 50), "scale": random.uniform(0.8, 1.5)}
 
