@@ -13,6 +13,8 @@ PIPE_GAP = 200
 PIPE_SPACING = 300
 PIPE_WIDTH = 80
 
+#High Score 41
+
 
 class Pipe:
     def __init__(self, width, height, x, y, is_top):
