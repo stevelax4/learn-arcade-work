@@ -5,19 +5,16 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 
-# --- Classes ---
 
 class Kite:
 
     def __init__(self, x, y):
-        """ Constructor. """
         self.x = x
         self.y = y
         self.speed = 5  # Speed at which the kite moves
         self.keys_pressed = set()  # Set of keys that are currently pressed
 
     def draw(self):
-        """ Draw the kite. """
         arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y + 20,
                                     arcade.color.RED)
         arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y - 20,
@@ -26,7 +23,6 @@ class Kite:
                                     arcade.color.ORANGE)
 
     def update(self):
-        """ Update kite position based on keyboard input. """
         if arcade.key.UP in self.keys_pressed:
             self.y += self.speed
         if arcade.key.DOWN in self.keys_pressed:
@@ -42,7 +38,6 @@ class Kite:
 
 
 class Balloon:
-    """A balloon controlled by the mouse position"""
 
     def __init__(self, x, y):
         self.x = x
@@ -104,10 +99,8 @@ def draw_fish(x, y):
     arcade.draw_rectangle_filled(x, y, 6, 6, arcade.color.ORANGE)
 
 
-# --- Main Game Class ---
 
 class MyGame(arcade.Window):
-    """ Our Custom Window Class """
 
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Lab 7 - User Control")
@@ -123,7 +116,6 @@ class MyGame(arcade.Window):
         self.pop_sound = arcade.load_sound(":resources:sounds/hit3.wav")
 
     def on_draw(self):
-        """ Called whenever we need to draw the window. """
         arcade.start_render()
 
         # Draw the background and scene elements
@@ -154,30 +146,24 @@ class MyGame(arcade.Window):
         self.balloon.draw()
 
     def on_update(self, delta_time):
-        """ Called to update our objects. """
         self.kite.update()
 
     def on_key_press(self, key, modifiers):
-        """ Called when a key is pressed. """
         if key in [arcade.key.UP, arcade.key.DOWN, arcade.key.LEFT, arcade.key.RIGHT]:
             self.kite.keys_pressed.add(key)
 
     def on_key_release(self, key, modifiers):
-        """ Called when a key is released. """
         if key in self.kite.keys_pressed:
             self.kite.keys_pressed.remove(key)
 
     def on_mouse_motion(self, x, y, dx, dy):
-        """ Called when the mouse moves """
         self.balloon.update_position(x, y)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        """ Called when the mouse is clicked """
         # Play pop sound when mouse clicked
         arcade.play_sound(self.pop_sound)
 
 
-# --- Main Function to Run the Game ---
 def main():
     window = MyGame()
     arcade.run()
