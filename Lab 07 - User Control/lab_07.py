@@ -18,9 +18,12 @@ class Kite:
 
     def draw(self):
         """ Draw the kite. """
-        arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y + 20, arcade.color.RED)
-        arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y - 20, arcade.color.FOREST_GREEN)
-        arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y - 5, arcade.color.ORANGE)
+        arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y + 20,
+                                    arcade.color.RED)
+        arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y - 20,
+                                    arcade.color.FOREST_GREEN)
+        arcade.draw_triangle_filled(self.x - 15, self.y + 10, self.x + 15, self.y + 10, self.x, self.y - 5,
+                                    arcade.color.ORANGE)
 
     def update(self):
         """ Update kite position based on keyboard input. """
@@ -38,21 +41,49 @@ class Kite:
         self.y = max(20, min(self.y, SCREEN_HEIGHT - 20))
 
 
+class Balloon:
+    """A balloon controlled by the mouse position"""
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.radius = 20
+
+    def draw(self):
+        # Draw the balloon body
+        arcade.draw_circle_filled(self.x, self.y, self.radius, arcade.color.PINK)
+        # Draw the balloon knot
+        arcade.draw_triangle_filled(self.x - 5, self.y - self.radius, self.x + 5, self.y - self.radius, self.x,
+                                    self.y - self.radius - 10, arcade.color.DARK_PINK)
+        # Draw the string
+        arcade.draw_line(self.x, self.y - self.radius - 10, self.x, self.y - self.radius - 40, arcade.color.DARK_BROWN,
+                         2)
+
+    def update_position(self, x, y):
+        # Update position to follow the mouse, constrained inside the screen
+        self.x = max(self.radius, min(x, SCREEN_WIDTH - self.radius))
+        self.y = max(self.radius, min(y, SCREEN_HEIGHT - self.radius))
+
+
 # --- Functions to Draw Objects ---
 
 def draw_sun(x, y):
     arcade.draw_circle_filled(x, y, 40, arcade.color.YELLOW)
 
+
 def draw_grass(x, y):
     arcade.draw_rectangle_filled(x, y, 800, 100, arcade.color.GREEN)
 
+
 def draw_tree_trunk(x, y):
     arcade.draw_rectangle_filled(x, y, 20, 60, arcade.color.DARK_BROWN)
+
 
 def draw_tree_leaves(x, y):
     arcade.draw_circle_filled(x, y, 30, arcade.color.FOREST_GREEN)
     arcade.draw_circle_filled(x - 15, y - 15, 25, arcade.color.FOREST_GREEN)
     arcade.draw_circle_filled(x + 15, y - 15, 25, arcade.color.FOREST_GREEN)
+
 
 def draw_clouds(x, y):
     arcade.draw_circle_filled(x, y, 20, arcade.color.WHITE)
@@ -61,10 +92,12 @@ def draw_clouds(x, y):
     arcade.draw_circle_filled(x + 30, y, 25, arcade.color.WHITE)
     arcade.draw_circle_filled(x + 50, y, 25, arcade.color.WHITE)
 
+
 def draw_pond(x, y):
     arcade.draw_circle_filled(x, y, 70, arcade.color.BLUE)
     arcade.draw_circle_filled(x - 50, y, 60, arcade.color.BLUE)
     arcade.draw_circle_filled(x - 80, y - 20, 60, arcade.color.BLUE)
+
 
 def draw_fish(x, y):
     arcade.draw_circle_filled(x + 5, y, 5, arcade.color.ORANGE)
@@ -80,9 +113,14 @@ class MyGame(arcade.Window):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Lab 7 - User Control")
         arcade.set_background_color(arcade.color.SKY_BLUE)
 
-        # Create kite
+        # Create kite controlled by keyboard
         self.kite = Kite(400, 300)  # Start in the middle of the screen
 
+        # Create balloon controlled by mouse
+        self.balloon = Balloon(600, 300)
+
+        # Load a simple sound effect to play on mouse click
+        self.pop_sound = arcade.load_sound(":resources:sounds/hit3.wav")
 
     def on_draw(self):
         """ Called whenever we need to draw the window. """
@@ -112,19 +150,31 @@ class MyGame(arcade.Window):
         # Draw the kite
         self.kite.draw()
 
+        # Draw the balloon
+        self.balloon.draw()
+
     def on_update(self, delta_time):
         """ Called to update our objects. """
         self.kite.update()
 
     def on_key_press(self, key, modifiers):
         """ Called when a key is pressed. """
-        if key == arcade.key.UP or key == arcade.key.DOWN or key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        if key in [arcade.key.UP, arcade.key.DOWN, arcade.key.LEFT, arcade.key.RIGHT]:
             self.kite.keys_pressed.add(key)
 
     def on_key_release(self, key, modifiers):
         """ Called when a key is released. """
         if key in self.kite.keys_pressed:
             self.kite.keys_pressed.remove(key)
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        """ Called when the mouse moves """
+        self.balloon.update_position(x, y)
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        """ Called when the mouse is clicked """
+        # Play pop sound when mouse clicked
+        arcade.play_sound(self.pop_sound)
 
 
 # --- Main Function to Run the Game ---
