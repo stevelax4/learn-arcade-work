@@ -1,5 +1,3 @@
-""" Sprite Sample Program """
-
 import random
 import arcade
 
@@ -62,6 +60,7 @@ class MyGame(arcade.Window):
         self.rock_list = arcade.SpriteList()
 
         self.score = 0
+        self.game_over = False
 
         self.player_sprite = arcade.Sprite(
             ":resources:images/animated_characters/zombie/zombie_jump.png", SPRITE_SCALING_PLAYER
@@ -90,26 +89,29 @@ class MyGame(arcade.Window):
         self.rock_list.draw()
         self.player_list.draw()
 
-        arcade.start_render()
-        self.coin_list.draw()
-        self.rock_list.draw()
-        self.player_list.draw()
-
         score_text = f"Score: {self.score}"
         arcade.draw_text(score_text, 10, 20, arcade.color.WHITE, 14)
 
         if self.game_over:
-                arcade.draw_text("GAME OVER!", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                 arcade.color.RED, 40, anchor_x="center")
-
-        score_text = f"Score: {self.score}"
-        arcade.draw_text(score_text, 10, 20, arcade.color.WHITE, 14)
+            arcade.draw_text(
+                "GAME OVER!",
+                SCREEN_WIDTH // 2,
+                SCREEN_HEIGHT // 2,
+                arcade.color.RED,
+                50,
+                anchor_x="center",
+                anchor_y="center"
+            )
 
     def on_mouse_motion(self, x, y, dx, dy):
-        self.player_sprite.center_x = x
-        self.player_sprite.center_y = y
+        if not self.game_over:
+            self.player_sprite.center_x = x
+            self.player_sprite.center_y = y
 
     def on_update(self, delta_time):
+        if self.game_over:
+            return  # Stop updating when game over
+
         self.coin_list.on_update(delta_time)
         self.rock_list.update()
 
@@ -129,8 +131,8 @@ class MyGame(arcade.Window):
 
         # End game when all coins are collected
         if len(self.coin_list) == 0:
+            self.game_over = True
             print("Game Over! Final Score:", self.score)
-            arcade.close_window()
 
 
 def main():
